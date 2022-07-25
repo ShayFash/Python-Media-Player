@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QVBoxLayout, \
-    QStyle, QSlider
+    QStyle, QSlider, QFileDialog
 from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QUrl
 import sys
 
 
@@ -24,14 +24,19 @@ class Window(QWidget):
 
         self.create_player()
 
-    # Creating multimedia functionality
+
     def create_player(self):
+        """
+        Creating Multimedia functionality
+        :return:
+        """
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
 
         videoWidget = QVideoWidget()
 
         # Add Button for Open Video
         self.openButton = QPushButton('Open Video')
+        self.openButton.clicked.connect(self.open_file)
 
         # Add Button for Play Video
         self.playButton = QPushButton()
@@ -62,13 +67,22 @@ class Window(QWidget):
         """
 
         vbox = QVBoxLayout()
+        vbox.addWidget(videoWidget)
 
         vbox.addLayout(hbox)
 
         # Need to set main window layout, which should be the vertical box layout
         self.setLayout(vbox)
 
-
+    def open_file(self):
+        """
+        Open file dialogue box, so we can open files from computer
+        :return:
+        """
+        filename, _ = QFileDialog.getOpenFileNames(self, "Open Video")
+        if filename != '':
+            self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(filename)))
+            self.playButton.setEnabled(True)
 
 
 
