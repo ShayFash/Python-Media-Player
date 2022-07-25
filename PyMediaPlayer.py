@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QVBoxLayout, \
+    QStyle, QSlider
 from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtMultimediaWidgets import QVideoWidget
@@ -29,7 +30,19 @@ class Window(QWidget):
 
         videoWidget = QVideoWidget()
 
+        # Add Button for Open Video
         self.openButton = QPushButton('Open Video')
+
+        # Add Button for Play Video
+        self.playButton = QPushButton()
+        self.playButton.setEnabled(False)
+        self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+
+        # Add Video Slider
+        self.slider = QSlider(Qt.Horizontal)
+        self.slider.setRange(0, 0)
+
+
 
         """
         The QHbox Layout lines up the widgets Horizontally
@@ -40,6 +53,8 @@ class Window(QWidget):
         hbox.setContentsMargins(0, 0, 0, 0)
 
         hbox.addWidget(self.openButton)
+        hbox.addWidget(self.playButton)
+        hbox.addWidget(self.slider)
 
         """
         The QVbox Layout lines up the widgets Vertically
