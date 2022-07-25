@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtGui import QIcon, QPalette
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtCore import Qt
 import sys
 
@@ -11,13 +13,20 @@ class Window(QWidget):
 
         self.setWindowIcon(QIcon("player.png"))
         self.setWindowTitle("Python Media Player")
-        self.setGeometry(350,100,700, 500)
+        self.setGeometry(350, 100, 700, 500)
 
         # Set color for window
         p = self.palette()
         # TODO: Find a color that works for the project
         p.setColor(QPalette.Window, Qt.black)
         self.setPalette(p)
+
+    # Creating multimedia functionality
+    def create_player(self):
+        self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+
+        videoWidget = QVideoWidget()
+        
 
 
 app = QApplication(sys.argv)
