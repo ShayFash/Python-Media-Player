@@ -78,8 +78,6 @@ class Window(QWidget):
         self.mediaPlayer.positionChanged.connect(self.position_changed)
         self.mediaPlayer.durationChanged.connect(self.duration_changed)
 
-
-
     def open_file(self):
         """
         Open file dialogue box, so we can open files from computer
@@ -87,7 +85,7 @@ class Window(QWidget):
         """
         filename, _ = QFileDialog.getOpenFileNames(self, "Open Video")
         if filename != '':
-            self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(filename)))
+            self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(filename[0])))
             self.playButton.setEnabled(True)
 
     def play_video(self):
@@ -128,13 +126,6 @@ class Window(QWidget):
         :return:
         """
         self.slider.setRange(0, duration)
-
-
-
-
-
-
-
 
 
 app = QApplication(sys.argv)
