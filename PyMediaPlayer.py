@@ -18,7 +18,6 @@ class Window(QWidget):
 
         # Set color for window
         p = self.palette()
-        # TODO: Find a color that works for the project
         p.setColor(QPalette.Window, Qt.black)
         self.setPalette(p)
 
@@ -47,6 +46,8 @@ class Window(QWidget):
         # Add Video Slider
         self.slider = QSlider(Qt.Horizontal)
         self.slider.setRange(0, 0)
+        self.slider.sliderMoved.connect(self.set_position)
+
 
         """
         The QHbox Layout lines up the widgets Horizontally
@@ -126,6 +127,9 @@ class Window(QWidget):
         :return:
         """
         self.slider.setRange(0, duration)
+
+    def set_position(self, position):
+        self.mediaPlayer.setPosition(position)
 
 
 app = QApplication(sys.argv)
