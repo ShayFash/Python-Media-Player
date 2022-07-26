@@ -32,7 +32,7 @@ class Window(QWidget):
         """
         self.mediaPlayer = QMediaPlayer(None, QMediaPlayer.VideoSurface)
 
-        videoWidget = QVideoWidget()
+        videowidget = QVideoWidget()
 
         # Add Button for Open Video
         self.openButton = QPushButton('Open Video')
@@ -42,12 +42,11 @@ class Window(QWidget):
         self.playButton = QPushButton()
         self.playButton.setEnabled(False)
         self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+        self.playButton.clicked.connect(self.play_video)
 
         # Add Video Slider
         self.slider = QSlider(Qt.Horizontal)
         self.slider.setRange(0, 0)
-
-
 
         """
         The QHbox Layout lines up the widgets Horizontally
@@ -67,12 +66,19 @@ class Window(QWidget):
         """
 
         vbox = QVBoxLayout()
-        vbox.addWidget(videoWidget)
+        vbox.addWidget(videowidget)
 
         vbox.addLayout(hbox)
+        self.mediaPlayer.setVideoOutput(videowidget)
 
         # Need to set main window layout, which should be the vertical box layout
         self.setLayout(vbox)
+
+        self.mediaPlayer.stateChanged.connect(self.mediastate_changed)
+        self.mediaPlayer.positionChanged.connect(self.position_changed)
+        self.mediaPlayer.durationChanged.connect(self.duration_changed)
+
+
 
     def open_file(self):
         """
@@ -83,6 +89,51 @@ class Window(QWidget):
         if filename != '':
             self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(filename)))
             self.playButton.setEnabled(True)
+
+    def play_video(self):
+        """
+        Video playing functionality
+        :return:
+        """
+        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+            self.mediaPlayer.pause()
+
+        else:
+            self.mediaPlayer.play()
+
+    def mediastate_changed(self, state):
+        """
+        Determines state of the video, is it playing or not and changes icons from play to pause
+        :param state:
+        :return:
+        """
+        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+            self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPause))
+
+        else:
+            self.playButton.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
+
+    def position_changed(self, position):
+        """
+        Determines position of video for the slider
+        :param position:
+        :return:
+        """
+        self.slider.setValue(position)
+
+    def duration_changed(self, duration):
+        """
+        Set duration changed for slider
+        :param duration:
+        :return:
+        """
+        self.slider.setRange(0, duration)
+
+
+
+
+
+
 
 
 
