@@ -22,6 +22,37 @@ class Window(QMainWindow):
         file.addAction("Open File")
         file.triggered[QAction].connect(self.open_file)
 
+        # Creating Media Objects
+        self.mediaPlayer = QMediaPlayer()
+        self.playlist = QMediaPlaylist()
+        self.mediaPlayer.setPlaylist(self.playlist)
+
+        self.videoItem = QGraphicsVideoItem()
+        self.videoItem.setAspectRatioMode(Qt.KeepAspectRatio)
+
+        scene = QGraphicsScene(self)
+        graphicsView = QGraphicsView(scene)
+        graphicsView.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        graphicsView.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scene.addItem(self.videoItem)
+
+        self.mediaPlayer.setVideoOutput(self.videoItem)
+        self.mediaPlayer.stateChanged.connect(self.mediastate_changed)
+        self.mediaPlayer.positionChanged.connect(self.position_changed)
+        self.mediaPlayer.durationChanged.connect(self.duration_changed)
 
 
 
+
+class PlaylistModel(QAbstractListModel):
+    def __init__(self, playlist, *args, **kwargs):
+        super(PlaylistModel, self).__init__(*args, **kwargs)
+        self.playlist = playlist
+
+    def data(self, index, role):
+        if role == Qt.DisplayRole:
+            media = self.playlist.media(index.row())
+            return media.canonicalUrl().fileName()
+
+    def rowCount(self, index):
+        return self.playlist.mediaCount()
