@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtMultimedia import *
 from PyQt5.QtMultimediaWidgets import *
 
+
 class Window(QMainWindow):
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
@@ -180,8 +181,6 @@ class Window(QMainWindow):
         self.aspr.installEventFilter(self)
 
 
-
-
 class PlaylistModel(QAbstractListModel):
     def __init__(self, playlist, *args, **kwargs):
         super(PlaylistModel, self).__init__(*args, **kwargs)
@@ -194,6 +193,36 @@ class PlaylistModel(QAbstractListModel):
 
     def rowCount(self, index):
         return self.playlist.mediaCount()
+
+
+def main():
+    app = QApplication(sys.argv)
+    app.setStyle('Fusion')
+
+    # Doing a dark palette color scheme
+    dark_palette = QPalette()
+    dark_palette.setColor(QPalette.Window, QColor(16, 16, 16))
+    dark_palette.setColor(QPalette.WindowText, Qt.white)
+    dark_palette.setColor(QPalette.Base, QColor(25, 25, 25))
+    dark_palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+    dark_palette.setColor(QPalette.ToolTipBase, Qt.white)
+    dark_palette.setColor(QPalette.ToolTipText, Qt.white)
+    dark_palette.setColor(QPalette.Text, Qt.white)
+    dark_palette.setColor(QPalette.Button, QColor(65, 65, 65))
+    dark_palette.setColor(QPalette.ButtonText, Qt.white)
+    dark_palette.setColor(QPalette.BrightText, Qt.red)
+    dark_palette.setColor(QPalette.Link, QColor(42, 130, 218))
+    dark_palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+    dark_palette.setColor(QPalette.HighlightedText, Qt.black)
+
+    app.setPalette(dark_palette)
+    app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid silver; }")
+
+    # Create a window object
+    mp = Window()
+    mp.show()
+    sys.exit(app.exec_())
+
 
 def hhmmss(ms):
     """
