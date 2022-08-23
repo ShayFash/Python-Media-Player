@@ -107,7 +107,7 @@ class Window(QMainWindow):
         self.totalTimeLabel.setAlignment(Qt.AlignCenter)
         self.totalTimeLabel.setText(hhmmss(0))
 
-        # ------ Creating Control widgets ---------- #
+        # Creating Control widgets
         self.plist = QPushButton(" Playlist")
         self.plist.setIcon(QIcon(":/icons/plist.png"))
         self.plist.setToolTip("Show Playlist")
@@ -278,6 +278,45 @@ class Window(QMainWindow):
 
         # UI function finished
 
+    # Function to Resize video display
+    def resizeEvent(self, event):
+        # print("W", self.width(), "H", self.height())
+        h = self.height() - 125
+        w = self.width() - 26
+        self.videoItem.setSize(QSizeF(w, h))
+
+    # Function to Open files and add them to playlist
+    def open_file(self):
+        filenames, _ = QFileDialog.getOpenFileNames(self, "Open Video", "",
+                                                    "*.mp4 *.3gp *.mkv, *.avi *.mov *.mp3 *.wav *.wma *.wmv *.flac "
+                                                    "*.3g2 *.m4a *.m4v *.aac *.asf *.3gpp';;All Files (*.*)")  #
+        filetype = ['.mp4', '.3gp', '.mkv', '.avi', '.mov', '.mp3', '.wav', '.wma', '.wmv', '.flac', '.3g2', '.m4a',
+                    '.m4v', '.aac', '.asf', '.3gpp', '.flv']
+        """
+        # filetype_caps = ['.MP4', '.3GP', '.MKV', '.AVI', '.MOV', '.MP3', '.WAV', '.WMA', '.WMV', '.FLAC', '.3G2', 
+        # '.M4A', '.M4V', '.AAC', '.ASF', '.3GPP', '.FLV']
+        """
+        if filenames:
+            for file in filenames:
+                if any(x in file for x in filetype):
+                    self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(file)))
+                else:
+                    pass
+
+        self.mediaPlayer.play()
+        self.model.layoutChanged.emit()
+
+        self.previous.setEnabled(True)
+        self.next.setEnabled(True)
+        self.skip_back.setEnabled(True)
+        self.play.setEnabled(True)
+        self.stop.setEnabled(True)
+        self.skip_forward.setEnabled(True)
+        self.playback.setEnabled(True)
+        self.pb_speed.setEnabled(True)
+        self.aspr.setEnabled(True)
+        self.p_play.setEnabled(True)
+        self.rm.setEnabled(True)
 
 
 
