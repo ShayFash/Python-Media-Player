@@ -180,6 +180,106 @@ class Window(QMainWindow):
         self.aspr.toggled.connect(self.aspRatio)
         self.aspr.installEventFilter(self)
 
+        # Playback Speed
+        self.pb_speed = QPushButton("1x")
+        self.pb_speed.setToolTip("Playback Speed")
+        self.pb_speed.setFixedWidth(50)
+        self.pb_speed.setEnabled(False)
+        self.menu = QMenu()
+        self.menu.addAction("0.25x")
+        self.menu.addAction("0.5x")
+        self.menu.addAction("0.75x")
+        self.menu.addAction("1x       Normal")
+        self.menu.addAction("1.25x")
+        self.menu.addAction("1.5x")
+        self.menu.addAction("1.75x")
+        self.menu.addAction("2x")
+        self.menu.addAction("2.25x")
+        self.menu.addAction("2.5x")
+        self.menu.addAction("2.75x")
+        self.menu.addAction("3x")
+        self.menu.triggered.connect(self.playback_speed)
+        self.pb_speed.setMenu(self.menu)
+
+        # Widgets and Layout
+        self.vbox = QVBoxLayout()
+        self.hbox_1 = QHBoxLayout()
+        self.hbox_2 = QHBoxLayout()
+        # Group box widget
+
+        self.gb = QGroupBox()
+        self.gb.setStyleSheet('border-radius: 10px ;''background-color:rgba(42, 42, 42, 90)')
+        # hbox_1 layout contains time slider and timing labels
+
+        self.hbox_1.addWidget(self.currentTimeLabel)
+        self.hbox_1.addWidget(self.time_slider)
+        self.hbox_1.addWidget(self.totalTimeLabel)
+
+        # hbox_2 layout contains control widgets in a group box
+        self.hbox_2.setSpacing(20)
+        self.hbox_2.addWidget(self.plist)
+        self.hbox_2.addSpacing(20)
+        self.hbox_2.addWidget(self.previous)
+        self.hbox_2.addWidget(self.next)
+        self.hbox_2.addStretch()
+        self.hbox_2.addWidget(self.skip_back)
+        self.hbox_2.addWidget(self.play)
+        self.hbox_2.addWidget(self.stop)
+        self.hbox_2.addWidget(self.skip_forward)
+        self.hbox_2.addSpacing(5)
+        self.hbox_2.addWidget(self.playback)
+        self.hbox_2.addStretch()
+        self.hbox_2.addWidget(self.mute)
+        self.hbox_2.addWidget(self.volume_slider)
+
+        # self.hbox_2.addStretch()
+        self.hbox_2.addWidget(self.pb_speed)
+        self.hbox_2.addWidget(self.aspr)
+
+        self.gb.setLayout(self.hbox_2)
+
+        self.stack1 = QWidget()
+        self.stack2 = QWidget()
+
+        #  stack 1 hbox_3
+        self.hbox_3 = QHBoxLayout()
+        self.hbox_3.addWidget(graphicsView)
+        self.stack1.setLayout(self.hbox_3)
+
+        # stack 2 vbox_2
+        self.hbox_4 = QHBoxLayout()
+        self.hbox_4.addStretch(2)
+        self.hbox_4.addSpacing(150)
+        self.hbox_4.addWidget(self.playback_Label)
+        self.hbox_4.addStretch(1)
+        self.hbox_4.addWidget(self.p_play)
+        self.hbox_4.addSpacing(2)
+        self.hbox_4.addWidget(self.rm)
+        self.hbox_4.addStretch(1)
+        self.hbox_4.setAlignment(Qt.AlignCenter)
+        self.vbox_2 = QVBoxLayout()
+        self.vbox_2.addWidget(self.playlistView)
+        self.vbox_2.addLayout(self.hbox_4)
+        self.stack2.setLayout(self.vbox_2)
+
+        self.stack = QStackedWidget()
+        self.stack.addWidget(self.stack1)
+        self.stack.addWidget(self.stack2)
+
+        self.vbox.addWidget(self.stack)
+        self.vbox.addLayout(self.hbox_1)
+        self.vbox.addWidget(self.gb)
+        self.vbox.setAlignment(Qt.AlignBottom)
+
+        # set vbox layout to main window
+        widget = QWidget()
+        widget.setLayout(self.vbox)
+        self.setCentralWidget(widget)
+
+        # UI function finished
+
+
+
 
 class PlaylistModel(QAbstractListModel):
     def __init__(self, playlist, *args, **kwargs):
