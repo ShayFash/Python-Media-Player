@@ -109,52 +109,52 @@ class Window(QMainWindow):
 
         # Creating Control widgets
         self.plist = QPushButton(" Playlist")
-        self.plist.setIcon(QIcon(":/icons/plist.png"))
+        self.plist.setIcon(QIcon("playlist.png"))
         self.plist.setToolTip("Show Playlist")
         self.plist.clicked.connect(self.plistview)
         self.plist.installEventFilter(self)
 
         self.previous = QPushButton(" Prev")
-        self.previous.setIcon(QIcon(":/icons/previous.png"))
+        self.previous.setIcon(QIcon("previous.png"))
         self.previous.pressed.connect(self.playlist.previous)
         self.previous.setEnabled(False)
         self.previous.installEventFilter(self)
 
         self.next = QPushButton(" Next")
-        self.next.setIcon(QIcon(":/icons/next.png"))
+        self.next.setIcon(QIcon("next.png"))
         self.next.pressed.connect(self.playlist.next)
         self.next.setEnabled(False)
         self.next.installEventFilter(self)
 
         self.skip_back = QPushButton()
-        self.skip_back.setIcon(QIcon(":/icons/skip_back.png"))
+        self.skip_back.setIcon(QIcon("skip_back.png"))
         self.skip_back.setToolTip('Skip 5 sec backward')
         self.skip_back.setEnabled(False)
         self.skip_back.clicked.connect(self.backward)
         self.skip_back.installEventFilter(self)
 
         self.play = QPushButton()
-        self.play.setIcon(QIcon(":/icons/play.png"))
+        self.play.setIcon(QIcon("play.png"))
         self.play.setToolTip("Play/Pause")
         self.play.setEnabled(False)
         self.play.pressed.connect(self.play_video)
 
         self.stop = QPushButton()
-        self.stop.setIcon(QIcon(":/icons/stop.png"))
+        self.stop.setIcon(QIcon(":stop.png"))
         self.stop.setToolTip("Stop")
         self.stop.setEnabled(False)
         self.stop.pressed.connect(self.mediaPlayer.stop)
         self.stop.installEventFilter(self)
 
         self.skip_forward = QPushButton()
-        self.skip_forward.setIcon(QIcon(":/icons/skip_frwd.png"))
+        self.skip_forward.setIcon(QIcon("skip_frwd.png"))
         self.skip_forward.setToolTip('Skip 5 sec forward')
         self.skip_forward.setEnabled(False)
         self.skip_forward.clicked.connect(self.forward)
         self.skip_forward.installEventFilter(self)
 
         self.playback = QPushButton("")
-        self.playback.setIcon(QIcon(":/icons/loop_off.png"))
+        self.playback.setIcon(QIcon("loop_off.png"))
         self.playback.setToolTip(" Playback Mode ")
         self.playback.clicked.connect(self.playback_mode)
         self.playback.setEnabled(False)
@@ -172,7 +172,7 @@ class Window(QMainWindow):
         self.volume_slider.valueChanged.connect(self.mediaPlayer.setVolume)
 
         self.aspr = QPushButton()
-        self.aspr.setIcon(QIcon(":/icons/aspr.png"))
+        self.aspr.setIcon(QIcon("aspr.png"))
         self.aspr.setStyleSheet('border-radius: 5px ;''background-color:#626262')
         self.aspr.setToolTip("Aspect Ratio")
         self.aspr.setCheckable(True)
@@ -318,6 +318,222 @@ class Window(QMainWindow):
         self.p_play.setEnabled(True)
         self.rm.setEnabled(True)
 
+    def ply(self):
+        self.playlist.setCurrentIndex(self.i)
+        self.mediaPlayer.play()
+
+    # Function to Remove the selected file from playlist
+
+    def remove(self):
+        self.playlist.removeMedia(self.i)
+        self.model.layoutChanged.emit()
+
+    def playlist_selection_changed(self, ix):
+        # We receive a QItemSelection from selectionChanged.
+        self.i = ix.indexes()[0].row()
+
+    def playlist_position_changed(self, i):
+        if i > -1:
+            ix = self.model.index(i)
+            self.playlistView.setCurrentIndex(ix)
+
+    #Function to switch between Playlist view and Video view
+
+    def plistview(self):
+        if self.stack.currentIndex() == 0:
+            self.stack.setCurrentIndex(1)
+        else:
+            self.stack.setCurrentIndex(0)
+
+    # Function to change aspect ratio
+
+    def aspRatio(self):
+        if self.aspr.isChecked():
+            self.videoItem.setAspectRatioMode(Qt.KeepAspectRatio)
+        else:
+            self.videoItem.setAspectRatioMode(Qt.IgnoreAspectRatio)
+
+    def playback_speed(self, action):
+        # print("triggred : ", action.text())
+        if action.text() == "1x       Normal":
+            self.mediaPlayer.setPlaybackRate(1.0)
+            self.pb_speed.setText("1x")
+        elif action.text() == "0.25x":
+            self.mediaPlayer.setPlaybackRate(0.25)
+            self.pb_speed.setText("0.25x")
+        elif action.text() == "0.5x":
+            self.mediaPlayer.setPlaybackRate(0.5)
+            self.pb_speed.setText("0.5x")
+        elif action.text() == "0.75x":
+            self.mediaPlayer.setPlaybackRate(0.75)
+            self.pb_speed.setText("0.75x")
+        elif action.text() == "1.25x":
+            self.mediaPlayer.setPlaybackRate(1.25)
+            self.pb_speed.setText("1.25x")
+        elif action.text() == "1.5x":
+            self.mediaPlayer.setPlaybackRate(1.5)
+            self.pb_speed.setText("1.5x")
+        elif action.text() == "1.75x":
+            self.mediaPlayer.setPlaybackRate(1.75)
+            self.pb_speed.setText("1.75x")
+        elif action.text() == "2x":
+            self.mediaPlayer.setPlaybackRate(2.0)
+            self.pb_speed.setText("2x")
+        elif action.text() == "2.25x":
+            self.mediaPlayer.setPlaybackRate(2.25)
+            self.pb_speed.setText("2.25x")
+        elif action.text() == "2.5x":
+            self.mediaPlayer.setPlaybackRate(2.5)
+            self.pb_speed.setText("2.5x")
+        elif action.text() == "2.75x":
+            self.mediaPlayer.setPlaybackRate(2.75)
+            self.pb_speed.setText("2.75x")
+        elif action.text() == "3x":
+            self.mediaPlayer.setPlaybackRate(3.0)
+            self.pb_speed.setText("3x")
+        else:
+            self.mediaPlayer.setPlaybackRate(1.0)
+
+        # -- Function to select playback mode  --- #
+
+    def playback_mode(self):
+        if self.playlist.playbackMode() == QMediaPlaylist.Sequential:
+            # print("playback mode changed to Loop")
+            self.playlist.setPlaybackMode(QMediaPlaylist.Loop)
+            self.playback.setIcon(QIcon(":/icons/loop_on.png"))
+            self.playback_Label.setText(" Current Playlist is in Loop")
+
+        elif self.playlist.playbackMode() == QMediaPlaylist.Loop:
+            # print("playback mode changed to item loop")
+            self.playlist.setPlaybackMode(QMediaPlaylist.CurrentItemInLoop)
+            self.playback.setIcon(QIcon(":/icons/item_loop.png"))
+            self.playback_Label.setText(" Current Item is in Loop")
+
+        elif self.playlist.playbackMode() == QMediaPlaylist.CurrentItemInLoop:
+            # print("playback mode changed to Random")
+            self.playlist.setPlaybackMode(QMediaPlaylist.Random)
+            self.playback.setIcon(QIcon(":/icons/shuffle_on.png"))
+            self.playback_Label.setText(" Current Playlist is in Shuffle")
+
+        elif self.playlist.playbackMode() == QMediaPlaylist.Random:
+            # print("playback mode changed to Sequntial")
+            self.playlist.setPlaybackMode(QMediaPlaylist.Sequential)
+            self.playback.setIcon(QIcon(":/icons/loop_off.png"))
+            self.playback_Label.setText(" Current Playlist is in Loop off")
+
+        # --- Function to Play or Pause ----- #
+
+    def play_video(self):
+        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+            self.mediaPlayer.pause()
+        else:
+            self.mediaPlayer.play()
+
+
+
+    def mediastate_changed(self, state):
+        # Function to change play/pause icon depending on media state
+        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+            self.play.setIcon(QIcon(":/icons/pause.png"))
+        else:
+            self.play.setIcon(QIcon(":/icons/play.png"))
+
+    def position_changed(self, position):
+        self.time_slider.blockSignals(True)
+        self.time_slider.setValue(position)
+        self.time_slider.blockSignals(False)
+        if position >= 0:
+            self.currentTimeLabel.setText(hhmmss(position))
+
+    def duration_changed(self, duration):
+        self.time_slider.setRange(0, duration)
+        if duration >= 0:
+            self.totalTimeLabel.setText(hhmmss(duration))
+
+    def set_position(self, position):
+        self.mediaPlayer.setPosition(position)
+
+    def backward(self):
+        self.mediaPlayer.setPosition(self.mediaPlayer.position() - 5000)
+
+    def forward(self):
+        self.mediaPlayer.setPosition(self.mediaPlayer.position() + 5000)
+
+    def mute_fn(self):
+        if self.mediaPlayer.isMuted():
+            self.mediaPlayer.setMuted(False)
+            self.mute.setIcon(self.style().standardIcon(QStyle.SP_MediaVolume))
+        else:
+            self.mediaPlayer.setMuted(True)
+            self.mute.setIcon(self.style().standardIcon(QStyle.SP_MediaVolumeMuted))
+
+    def eventFilter(self,  widget, event):
+        # Function to avoid spacebar control over all buttons except for play/pause button
+        if event.type() == QEvent.KeyPress and widget is self.plist:
+            if event.key() == Qt.Key_Space:
+                return True
+        elif event.type() == QEvent.KeyPress and widget is self.playback:
+            if event.key() == Qt.Key_Space:
+                return True
+        elif event.type() == QEvent.KeyPress and widget is self.p_play:
+            if event.key() == Qt.Key_Space:
+                return True
+        elif event.type() == QEvent.KeyPress and widget is self.rm:
+            if event.key() == Qt.Key_Space:
+                return True
+        elif event.type() == QEvent.KeyPress and widget is self.skip_back:
+            if event.key() == Qt.Key_Space:
+                return True
+        elif event.type() == QEvent.KeyPress and widget is self.stop:
+            if event.key() == Qt.Key_Space:
+                return True
+        elif event.type() == QEvent.KeyPress and widget is self.skip_forward:
+            if event.key() == Qt.Key_Space:
+                return True
+        elif event.type() == QEvent.KeyPress and widget is self.mute:
+            if event.key() == Qt.Key_Space:
+                return True
+        elif event.type() == QEvent.KeyPress and widget is self.aspr:
+            if event.key() == Qt.Key_Space:
+                return True
+        elif event.type() == QEvent.KeyPress and widget is self.pb_speed:
+            if event.key() == Qt.Key_Space:
+                return True
+        elif event.type() == QEvent.KeyPress and widget is self.previous:
+            if event.key() == Qt.Key_Space:
+                return True
+        elif event.type() == QEvent.KeyPress and widget is self.next:
+            if event.key() == Qt.Key_Space:
+                return True
+
+        return super(Window, self).eventFilter(widget, event)
+
+    # Function for shortcut keys
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_S:
+            self.mediaPlayer.stop()
+        if event.key() == Qt.Key_A:
+            self.backward()
+        if event.key() == Qt.Key_D:
+            self.forward()
+        if event.key() == Qt.Key_Space:
+            self.play_video()
+        if event.key() == Qt.Key_1:
+            self.videoItem.setAspectRatioMode(Qt.KeepAspectRatio)
+        if event.key() == Qt.Key_2:
+            self.videoItem.setAspectRatioMode(Qt.IgnoreAspectRatio)
+        if event.key() == Qt.Key_M:
+            self.mute_fn()
+        if event.key() == Qt.Key_P:
+            self.plistview()
+        if event.key() == Qt.Key_V:
+            self.playlist.previous()
+        if event.key() == Qt.Key_N:
+            self.playlist.next()
+        if event.key() == Qt.Key_Plus:
+            self.volume_slider.setValue(self.volume_slider.value() + 2)
+        if event.key() == Qt.Key_Minus:
+            self.volume_slider.setValue(self.volume_slider.value() - 2)
 
 
 class PlaylistModel(QAbstractListModel):
@@ -373,3 +589,8 @@ def hhmmss(ms):
     m, s = divmod(s, 60)
     h, m = divmod(m, 60)
     return ("%d:%02d:%02d" % (h, m, s)) if h else ("%d:%02d" % (m, s))
+
+if __name__ == '__main__':
+    # ---- for Windows OS the preferred plugin to support media files -- #
+    os.environ['QT_MULTIMEDIA_PREFERRED_PLUGINS'] = 'windowsmediafoundation'
+    main()
