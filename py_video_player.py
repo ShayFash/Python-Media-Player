@@ -289,7 +289,7 @@ class Window(QMainWindow):
     def open_file(self):
         filenames, _ = QFileDialog.getOpenFileNames(self, "Open Video", "",
                                                     "*.mp4 *.3gp *.mkv, *.avi *.mov *.mp3 *.wav *.wma *.wmv *.flac "
-                                                    "*.3g2 *.m4a *.m4v *.aac *.asf *.3gpp';;All Files (*.*)")  #
+                                                    "*.3g2 *.m4a *.m4v *.aac *.asf *.3gpp';;All Files (*.*)")
         filetype = ['.mp4', '.3gp', '.mkv', '.avi', '.mov', '.mp3', '.wav', '.wma', '.wmv', '.flac', '.3g2', '.m4a',
                     '.m4v', '.aac', '.asf', '.3gpp', '.flv']
         """
